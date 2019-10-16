@@ -12,3 +12,4 @@ before_install:
       
 script:
     - python test_hash_functions.py
+    - python test_hash_tables.py
