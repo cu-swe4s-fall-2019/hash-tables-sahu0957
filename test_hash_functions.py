@@ -18,6 +18,18 @@ class TestHashFunctions(unittest.TestCase):
         r = hash_functions.h_ascii('dog', 313)
         self.assertEqual(r, 1)
 
+    def test_hash_rolling_index1(self):
+        # A table of size 1 should always return an index of 0 with one
+        # word regardless of size
+        r = hash_functions.h_rolling('dog', 1)
+        self.assertEqual(r, 0)
+
+    def test_hash_rolling_largetable(self):
+        # The resulting hash value for 'dog' is 295310 for this polynomial
+        # of 53, so a table of size 295309 should return an index of 1
+        r = hash_functions.h_rolling('dog', 295309)
+        self.assertEqual(r, 1)
+    
 if __name__ == '__main__':
     unittest.main()
 
