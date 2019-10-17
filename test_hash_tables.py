@@ -2,17 +2,8 @@ import unittest
 import hash_tables
 import hash_functions
 import random
-import statistics
-import math
 
-r = hash_tables.LinearProbe(1, hash_functions.h_ascii)
-r.add('sample1', 'value1')
-x = r.search('sample1')
-#self.assertEqual(r.search('sample1'), 'value1')
-print(x)
-
-
-class TestHashTables(unittest.TestCase):
+class TestLPHashTables(unittest.TestCase):
  
     def test_hash_table_ascii_add(self):
         # We  add one word to a table of size 1, which should end
@@ -27,7 +18,7 @@ class TestHashTables(unittest.TestCase):
         self.assertEqual(r.search('sample1'), 'value1')
 
     def test_hash_table_full(self):
-        # If the hash table is full, it should submit an error
+        # If the hash table is full, it should submit a "False"
         r = hash_tables.LinearProbe(1, hash_functions.h_ascii)
         r.add('sample1', 'value1')
         self.assertEqual(r.add('sample2', 'value2'), False)
@@ -52,6 +43,28 @@ class TestHashTables(unittest.TestCase):
         r.add('sample4', 'value4')
         r.add('sample5', 'value5')
         self.assertEqual(r.search('sample5'), 'value5')
+
+    def test_hash_table_add_rolling_None(self):
+        # If we try to add a None object, it should raise an error 
+        r = hash_tables.LinearProbe(5, hash_functions.h_rolling)
+        with self.assertRaises(TypeError):
+            r.add(None, None)
+    
+    def test_hash_table_add_ascii_None(self):
+        # If we try to add a None object, it should raise an error 
+        r = hash_tables.LinearProbe(5, hash_functions.h_ascii)
+        with self.assertRaises(TypeError):
+            r.add(None, None)
+    
+    def test_hash_table_search_notpresent(self):
+        # If we try to add a None object, it should raise an error 
+        r = hash_tables.LinearProbe(5, hash_functions.h_ascii)
+        r.add('sample1', 'value1')
+        r.add('sample2', 'value2')
+        self.assertEqual(r.search('sample3'), None)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
