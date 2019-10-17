@@ -25,26 +25,37 @@ X = []
 Y = []
 i = 0
 
+
 B = sys.stdin
 
-for l in B:
-    A = l.rstrip().split()
-    if len(A) == 3:
-        X.append(float(A[1]))
-        Y.append(float(A[2]))
-    elif len(A) == 1:
-        X.append(float(i))
-        Y.append(float(A[0]))
-        i+=1
+try:
+    for l in B:
+        A = l.rstrip().split()
+        if len(A) == 3:
+            X.append(float(A[1]))
+            Y.append(float(A[2]))
+        elif len(A) == 2:
+            X.append(float(i))
+            Y.append(float(A[1]))
+            i+=1
+        else:
+            sys.stderr.write("Stdin is the wrong dimension! Exiting...")
+            sys.exit(1)
 
-width=3
-height=3
-fig = plt.figure(figsize=(width,height),dpi=300)
+    width=3
+    height=3
+    fig = plt.figure(figsize=(width,height),dpi=300)
 
-ax = fig.add_subplot(1, 1, 1)
+    ax = fig.add_subplot(1, 1, 1)
 
-ax.plot(X, Y, '.', ms=1, alpha=0.5)
-ax.set_xlabel(x_label)
-ax.set_ylabel(y_label)
+    ax.plot(X, Y, '.', ms=1, alpha=0.5)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
 
-plt.savefig(out_file, bbox_inches='tight')
+    plt.savefig(out_file, bbox_inches='tight')
+
+except ValueError:
+    # If the plot can't be created, we will print this message
+    # and exit
+    sys.stderr.write('Nonnumber entries in stdin! Exiting...')
+    sys.exit(1)

@@ -30,8 +30,9 @@ class LinearProbe:
             slot = (start_hash + i) % self.N
             if self.T[slot] == None:
                 self.T[slot] = (key, value)
+                print("hash_and_slot", start_hash % self.N, self.M) 
                 self.M += 1
-                return True 
+                return True
         return False
 
     def search(self, key):
@@ -95,4 +96,7 @@ if __name__ == '__main__':
             break
 
     for m in open(args.key_file):
+        t0 = time.time()
         search_val = r.search(m)
+        t1 = time.time()
+        print('search', t1-t0)

@@ -30,6 +30,25 @@ class TestHashFunctions(unittest.TestCase):
         r = hash_functions.h_rolling('dog', 295309)
         self.assertEqual(r, 1)
     
+    def test_hash_ascii_Noneinput(self):
+        # None inputs should result in a TypeError
+        with self.assertRaises(TypeError):
+            r = hash_functions.h_ascii(None, 1)
+
+    def test_hash_rolling_Noneinput(self):
+        # None inputs should result in a TypeError
+        with self.assertRaises(TypeError):
+            r = hash_functions.h_rolling(None, 1)
+
+    def test_hash_rolling_NumberInput(self):
+        with self.assertRaises(TypeError):
+            r = hash_functions.h_rolling(100, 1)
+    
+    def test_hash_ascii_NumberInput(self):
+        with self.assertRaises(TypeError):
+            r = hash_functions.h_ascii(100, 1)
+
+
 if __name__ == '__main__':
     unittest.main()
 
