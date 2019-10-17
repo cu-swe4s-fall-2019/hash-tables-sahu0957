@@ -1,7 +1,8 @@
 import hash_functions
 import argparse
 import sys
-import matplotlib as plt
+import time
+import csv
 
 class LinearProbe:
     def __init__(self, N, hash_function):
@@ -31,20 +32,21 @@ class LinearProbe:
                 self.T[slot] = (key, value)
                 self.M += 1
                 return True 
-
-        print("the hash table is full!")
         return False
 
     def search(self, key):
+        # Our initial spot to search will be from the hash function
+        # output
         start_hash = self.hash_function(key, self.N)
         for i in range(self.N):
+            # Starting at the hash slot, look to see whether the key matches
+            # the value. If not, look at the next spot
             slot = (start_hash + i) % self.N
             if self.T[slot] == None:
-                print("key not in list")
+                # If the slot is empty, it means the key was never added
                 return None
             if key == self.T[slot][0]:
                 return self.T[slot][1]
-        print("key not found!")
         return None
 
 class ChainedHash:
@@ -85,9 +87,11 @@ if __name__ == '__main__':
         sys.exit()
     
     for l in open(args.key_file):
+        t0 = time.time()
         r.add(l, l)
+        t1 = time.time()
+        print('add_time', r.M/r.N, t1-t0)
         if r.M == args.number_of_keys:
-            print("hash table is full!")
             break
 
     for m in open(args.key_file):
