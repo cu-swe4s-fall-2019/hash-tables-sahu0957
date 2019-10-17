@@ -1,4 +1,7 @@
 import hash_functions
+import argparse
+import sys
+import matplotlib as plt
 
 class LinearProbe:
     def __init__(self, N, hash_function):
@@ -29,13 +32,20 @@ class LinearProbe:
                 self.M += 1
                 return True 
 
-        print(self.M)
         print("the hash table is full!")
         return False
 
     def search(self, key):
         start_hash = self.hash_function(key, self.N)
-        pass
+        for i in range(self.N):
+            slot = (start_hash + i) % self.N
+            if self.T[slot] == None:
+                print("key not in list")
+                return None
+            if key == self.T[slot][0]:
+                return self.T[slot][1]
+        print("key not found!")
+        return None
 
 class ChainedHash:
     def __init__(self, N, hash_fucntion):
@@ -50,4 +60,35 @@ class ChainedHash:
         start_hash = self.hash_fucntion(key, self.N)
         pass
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            description="explores the efficiency of various hashing strategies")
+    parser.add_argument("--probe_type",
+                        help="Linear or Chained Hash add/search strategy", type=str)
+    parser.add_argument("--hash_type",
+                        help="rolling or ascii hash function",
+                        type=str)
+    parser.add_argument("--table_size", help="size of word list", type=int)
+    parser.add_argument("--key_file", help="keys to add to hash table", type=str)
+    parser.add_argument("--number_of_keys", help="number of keys to add from the file", type=str)
+    
+    r = None
+    args = parser.parse_args()
+    
+    if args.probe_type == "linear":
+        if args.hash_type == 'ascii':
+            r = LinearProbe(args.table_size, hash_functions.h_ascii)
+        if args.hash_type == 'rolling':
+            r = LinearProbe(args.table_size, hash_functions.h_rolling)
+    else:
+        print("probe strategy not recognized!")
+        sys.exit()
+    
+    for l in open(args.key_file):
+        r.add(l, l)
+        if r.M == args.number_of_keys:
+            print("hash table is full!")
+            break
 
+    for m in open(args.key_file):
+        search_val = r.search(m)
