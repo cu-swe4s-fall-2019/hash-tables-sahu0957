@@ -2,7 +2,6 @@ import hash_functions
 import argparse
 import sys
 import time
-import csv
 
 class LinearProbe:
     def __init__(self, N, hash_function):
@@ -51,17 +50,26 @@ class LinearProbe:
         return None
 
 class ChainedHash:
-    def __init__(self, N, hash_fucntion):
-        self.hash_fucntion = hash_fucntion
+    def __init__(self, N, hash_functions):
+        self.hash_functions = hash_functions
         self.N = N
+        # We have to use a set of size N of empty arrays for chained
+        # hashing strategy
+        self.T = [ [] for i in range(N)]
+        self.M = 0
 
     def add(self, key, value):
-        start_hash = self.hash_fucntion(key, self.N)
-        pass
+        start_hash = self.hash_functions(key, self.N)
+        self.T[start_hash].append((key,value))
+        self.M += 1
+        return True
 
     def search(self, key):
-        start_hash = self.hash_fucntion(key, self.N)
-        pass
+        start_hash = self.hash_functions(key, self.N)
+        for k,v in self.T[start_hash]:
+            if key == k:
+                return v
+        return None
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -83,6 +91,11 @@ if __name__ == '__main__':
             r = LinearProbe(args.table_size, hash_functions.h_ascii)
         if args.hash_type == 'rolling':
             r = LinearProbe(args.table_size, hash_functions.h_rolling)
+    elif args.probe_type == "chained":
+        if args.hash_type == 'ascii':
+            r = ChainedHash(args.table_size, hash_functions.h_ascii)
+        if args.hash_type == 'rolling':
+            r = ChainedHash(args.table_size, hash_functions.h_rolling)
     else:
         print("probe strategy not recognized!")
         sys.exit()
