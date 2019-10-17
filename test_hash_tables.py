@@ -63,8 +63,64 @@ class TestLPHashTables(unittest.TestCase):
         r.add('sample2', 'value2')
         self.assertEqual(r.search('sample3'), None)
 
+class TestCHHashTables(unittest.TestCase):
+    
+    def test_chainedhash_ascii_addone(self):
+        # a one-word, one-value key should always go in the first slot
+        r = hash_tables.ChainedHash(1, hash_functions.h_ascii)
+        r.add('sample1', 'value1')
+        self.assertEqual(r.T[0], [('sample1', 'value1')])
+    
+    def test_chainedhash_rolling_addone(self):
+        # a one-word, one-value key should always go in the first slot
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        self.assertEqual(r.T[0], [('sample1', 'value1')])
+ 
+    def test_chainedhash_rolling_add_fulltable(self):
+        # two one-word, one-value key should always go in the first slot
+        # and a collision will result in the second going to the same spot
+        # with a different index
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        r.add('sample2', 'value2')
+        self.assertEqual(r.T[0][1], ('sample2','value2'))
+    
+    def test_chainedhash_ascii_search_singleentry(self):
+        # search should return value of single entry input
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        self.assertEqual(r.search('sample1'), 'value1')
+
+    def test_chainedhash_ascii_search_notpresent(self):
+        # search should return value None when key isn't present
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        self.assertEqual(r.search('sample2'), None)
 
 
+    def test_chainedhash_ascii_search_last(self):
+        # search should return value of the last sample added
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        r.add('sample2', 'value2')
+        r.add('sample3', 'value3')
+        r.add('sample4', 'value4')
+        r.add('sample5', 'value5')
+        
+        self.assertEqual(r.search('sample5'), 'value5')
+
+    def test_chanedhash_collision(self):
+        # in a table of 1, all samples will hash to the same spot
+        # search should return the values regardless of this
+        r = hash_tables.ChainedHash(1, hash_functions.h_rolling)
+        r.add('sample1', 'value1')
+        r.add('sample2', 'value2')
+        r.add('sample3', 'value3')
+        r.add('sample4', 'value4')
+        r.add('sample5', 'value5')
+        
+        self.assertEqual(r.search('sample5'), 'value5')
 
 if __name__ == '__main__':
     unittest.main()

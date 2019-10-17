@@ -79,3 +79,26 @@ run scatter_error_testing echo "" | python scatter.py "error" "time" "test"
 
 # ssshtest is having issues calling error codes from python, so I check them through bash
 assert_equal $(echo $?) 1
+
+
+# Test whether Chained Hash option will run with both ascii and rolling
+# Hash strategies
+run hash_tables_random_words_rolling_graphing python hash_tables.py \
+        --probe_type chained \
+        --hash_type rolling \
+        --table_size 1000 \
+        --key_file random_words.txt \
+        --number_of_keys 1000 | \
+        grep add_time | python scatter.py "add_test.png" "time" "value"
+
+assert_exit_code 0
+
+run hash_tables_random_words_rolling_graphing python hash_tables.py \
+        --probe_type chained \
+        --hash_type ascii \
+        --table_size 1000 \
+        --key_file random_words.txt \
+        --number_of_keys 1000 | \
+        grep add_time | python scatter.py "add_test.png" "time" "value"
+
+assert_exit_code 0
