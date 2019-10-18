@@ -133,7 +133,7 @@ python hash_tables.py \
 	python scatter.py add_time_linear_hash_rolling_nonrandom load_factor a
 dd_time
 ```
-![](add_time_linear_hash_rolling_nonrandom.png)
+![](add_time_linear_probe_rolling_nonrandom.png)
 
 ```sh
 python hash_tables.py \
@@ -172,7 +172,6 @@ ipts\
 	*ADDED: hash_table_runner.sh to easily run the above scripts\
 	*ADDED: Random and nonrandom word generators\
 
-## To Contribute
 ## To Contribute
 1. Fork it (< https://github.com/cu-swe4s-fall-2019/hash-tables-sahu0957.git>)
 2. Create your feature branch (`git checkout -b feature_branch`)
