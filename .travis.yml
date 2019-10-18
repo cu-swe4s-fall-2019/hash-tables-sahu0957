@@ -14,3 +14,5 @@ script:
     - python test_hash_functions.py
     - python test_hash_tables.py
     - bash test_hash_tables.sh
+    - pycodestyle hash_tables.py
+    - pycodestyle hash_functions.py

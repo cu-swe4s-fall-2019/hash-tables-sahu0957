@@ -3,22 +3,22 @@ import argparse
 import sys
 import time
 
+
 class LinearProbe:
     def __init__(self, N, hash_function):
         # Specify hash function to use (h_ascii or h_rolling)
         self.hash_function = hash_function
-        
         # Specify table size
         self.N = N
 
         # initiate a table of size N populated with None
         self.T = [None for i in range(N)]
-        
+
         # Define a load factor for rehashing
         self.M = 0
 
     def add(self, key, value):
-        
+
         # Define a starting value in the table. If this
         # Index is full already, we'll move on to the next empty
         # slot linearly
@@ -27,9 +27,9 @@ class LinearProbe:
             # Increase the start hash incrementally (only if the
             # first hash slot is already filled)
             slot = (start_hash + i) % self.N
-            if self.T[slot] == None:
+            if self.T[slot] is None:
                 self.T[slot] = (key, value)
-                print("hash_and_slot", start_hash % self.N, self.M) 
+                print("hash_and_slot", start_hash % self.N, self.M)
                 self.M += 1
                 return True
         return False
@@ -42,12 +42,13 @@ class LinearProbe:
             # Starting at the hash slot, look to see whether the key matches
             # the value. If not, look at the next spot
             slot = (start_hash + i) % self.N
-            if self.T[slot] == None:
+            if self.T[slot] is None:
                 # If the slot is empty, it means the key was never added
                 return None
             if key == self.T[slot][0]:
                 return self.T[slot][1]
         return None
+
 
 class ChainedHash:
     def __init__(self, N, hash_functions):
@@ -55,37 +56,43 @@ class ChainedHash:
         self.N = N
         # We have to use a set of size N of empty arrays for chained
         # hashing strategy
-        self.T = [ [] for i in range(N)]
+        self.T = [[] for i in range(N)]
         self.M = 0
 
     def add(self, key, value):
         start_hash = self.hash_functions(key, self.N)
-        self.T[start_hash].append((key,value))
+        self.T[start_hash].append((key, value))
         self.M += 1
         return True
 
     def search(self, key):
         start_hash = self.hash_functions(key, self.N)
-        for k,v in self.T[start_hash]:
+        for k, v in self.T[start_hash]:
             if key == k:
                 return v
         return None
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-            description="explores the efficiency of various hashing strategies")
+            description="explores the efficiency of \
+                        various hashing strategies")
     parser.add_argument("--probe_type",
-                        help="Linear or Chained Hash add/search strategy", type=str)
+                        help="Linear or Chained Hash add/search strategy",
+                        type=str)
     parser.add_argument("--hash_type",
                         help="rolling or ascii hash function",
                         type=str)
-    parser.add_argument("--table_size", help="size of word list", type=int)
-    parser.add_argument("--key_file", help="keys to add to hash table", type=str)
-    parser.add_argument("--number_of_keys", help="number of keys to add from the file", type=str)
-    
+    parser.add_argument("--table_size", help="size of word list",
+                        type=int)
+    parser.add_argument("--key_file", help="keys to add to hash table",
+                        type=str)
+    parser.add_argument("--number_of_keys",
+                        help="number of keys to add from the file", type=str)
+
     r = None
     args = parser.parse_args()
-    
+
     if args.probe_type == "linear":
         if args.hash_type == 'ascii':
             r = LinearProbe(args.table_size, hash_functions.h_ascii)
@@ -99,7 +106,7 @@ if __name__ == '__main__':
     else:
         print("probe strategy not recognized!")
         sys.exit()
-    
+
     for l in open(args.key_file):
         t0 = time.time()
         r.add(l, l)
