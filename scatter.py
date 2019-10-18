@@ -8,11 +8,11 @@ parser = argparse.ArgumentParser(
         description="reads from hash_tables.py stdin to graphically show\
         hashing strategy efficiencies")
 parser.add_argument("outfile",
-            help="output png file", type=str)
+                    help="output png file", type=str)
 parser.add_argument("x_label",
-            help="label of the x axis", type=str)
+                    help="label of the x axis", type=str)
 parser.add_argument("y_label",
-            help="label of the y axis", type=str)
+                    help="label of the y axis", type=str)
 
 
 args = parser.parse_args()
@@ -37,14 +37,14 @@ try:
         elif len(A) == 2:
             X.append(float(i))
             Y.append(float(A[1]))
-            i+=1
+            i += 1
         else:
             sys.stderr.write("Stdin is the wrong dimension! Exiting...")
             sys.exit(1)
 
-    width=3
-    height=3
-    fig = plt.figure(figsize=(width,height),dpi=300)
+    width = 3
+    height = 3
+    fig = plt.figure(figsize=(width, height), dpi=300)
 
     ax = fig.add_subplot(1, 1, 1)
 
