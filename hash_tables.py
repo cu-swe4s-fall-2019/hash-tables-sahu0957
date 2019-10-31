@@ -14,10 +14,10 @@ class LinearProbe:
 
         # We'll store the keys separately here
         # When we import to plot_gtex.py, we'll call this class
-        # where K will be our keys and T will be our table of 
+        # where K will be our keys and T will be our table of
         # keys and values
         self.K = []
-        # initiate a table of size N populated with None. T will be our hash table
+        # initiate a table of size N of Nones. T is our hash table
         self.T = [None for i in range(N)]
 
         # Define a load factor for rehashing
@@ -42,7 +42,7 @@ class LinearProbe:
                 print("hash_and_slot", start_hash % self.N, self.M)
                 self.M += 1
 
-                # Here, we store the key that was added. We can use 
+                # Here, we store the key that was added. We can use
                 # this to search our two parallel hash table in later steps
                 self.K.append(key.strip('\n'))
                 return True
