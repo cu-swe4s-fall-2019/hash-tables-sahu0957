@@ -1,7 +1,7 @@
 import argparse
 import sys
 import time
-sys.path.append('hash_table_sahu0957')
+sys.path.append('hash-table-sahu0957')
 import hash_functions
 
 
