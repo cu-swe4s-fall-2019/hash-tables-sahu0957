@@ -11,7 +11,12 @@ class LinearProbe:
         # Specify table size
         self.N = N
 
-        # initiate a table of size N populated with None
+        # We'll store the keys separately here
+        # When we import to plot_gtex.py, we'll call this class
+        # where K will be our keys and T will be our table of 
+        # keys and values
+        self.K = []
+        # initiate a table of size N populated with None. T will be our hash table
         self.T = [None for i in range(N)]
 
         # Define a load factor for rehashing
@@ -19,7 +24,7 @@ class LinearProbe:
 
     def add(self, key, value):
 
-        # Define a starting value in the table. If this
+        # Define a starting value in the table with our hash function. If this
         # Index is full already, we'll move on to the next empty
         # slot linearly
         start_hash = self.hash_function(key, self.N)
@@ -28,9 +33,17 @@ class LinearProbe:
             # first hash slot is already filled)
             slot = (start_hash + i) % self.N
             if self.T[slot] is None:
+                # This key can be calculated by our hash function
+                # and then searched later
+                # In the case of plot_gtex.py, what will be saved here is the
+                # Sample name and its type e.g. ('GTEX-XYZ', 'Blood')
                 self.T[slot] = (key, value)
                 print("hash_and_slot", start_hash % self.N, self.M)
                 self.M += 1
+
+                # Here, we store the key that was added. We can use 
+                # this to search our two parallel hash table in later steps
+                self.K.append(key.strip('\n'))
                 return True
         return False
 
