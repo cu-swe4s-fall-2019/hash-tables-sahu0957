@@ -1,7 +1,8 @@
-import hash_functions
 import argparse
 import sys
 import time
+sys.path.append('hash_table_sahu0957')
+import hash_functions
 
 
 class LinearProbe:
